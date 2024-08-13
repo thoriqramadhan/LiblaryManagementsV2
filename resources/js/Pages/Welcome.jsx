@@ -14,15 +14,24 @@ export default function Welcome({ auth }) {
                         }`}
                     >
                         {auth ? (
-                            <Link href="/dashboard" className="text-link">
+                            <Link
+                                href={route("dashboard")}
+                                className="text-link"
+                            >
                                 Dashboard
                             </Link>
                         ) : (
                             <>
-                                <Link href="/login" className="text-link">
+                                <Link
+                                    href={route("login")}
+                                    className="text-link"
+                                >
                                     Login
                                 </Link>
-                                <Link href="/register" className="text-link">
+                                <Link
+                                    href={route("register")}
+                                    className="text-link"
+                                >
                                     Register
                                 </Link>
                             </>
