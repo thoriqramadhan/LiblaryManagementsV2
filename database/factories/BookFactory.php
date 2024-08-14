@@ -21,6 +21,7 @@ class BookFactory extends Factory
             'author' => fake()->name(),
             'description' => fake()->paragraph(random_int(1,2)),
             'status' => random_int(0,1),
+            'return_at' => now()->addMinutes(60),
             'category_id' => random_int(1,2),
             'user_id' => random_int(0,1)
         ];

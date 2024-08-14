@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('author');
             $table->string('description' , 2000);
             $table->string('status');
+            $table->timestamp('return_at')->nullable();
             $table->foreignId('category_id');
             $table->foreignId('user_id')->nullable();
         });
