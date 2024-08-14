@@ -2,8 +2,16 @@ import Dropdown from "@/Components/Dropdown";
 import Table from "@/Components/Table";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ auth, books }) {
+    const [bookFilter, setBookFilter] = useState("available");
+    function setBookTab($param) {
+        setBookFilter($param);
+    }
+    // useEffect(() => {
+    //     console.log(bookFilter);
+    // }, [bookFilter]);
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -46,18 +54,30 @@ export default function Dashboard({ auth }) {
                         </Dropdown>
 
                         <div className="flex gap-x-3">
-                            <div className="bg-white rounded-md border px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                            <div
+                                onClick={() => setBookTab("available")}
+                                className={`tab-books ${
+                                    bookFilter == "available"
+                                        ? "selected-tab"
+                                        : ""
+                                }`}
+                            >
                                 Available
                             </div>
-                            <div className="bg-white rounded-md border px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                            <div
+                                onClick={() => setBookTab("booked")}
+                                className={`tab-books ${
+                                    bookFilter == "booked" ? "selected-tab" : ""
+                                }`}
+                            >
                                 Booked
                             </div>
                         </div>
                     </div>
-                    <div className="w-full flex-1 bg-red-800 px-4 py-4">
+                    <div className="w-full flex-1 bg-white px-4 py-4">
                         <p>List Of Books</p>
                         <p>Description testt </p>
-                        <Table />
+                        <Table books={books} bookTab={bookFilter} />
                     </div>
                 </main>
             </div>
