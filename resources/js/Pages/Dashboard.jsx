@@ -6,12 +6,10 @@ import { useEffect, useState } from "react";
 
 export default function Dashboard({ auth, books }) {
     const [bookFilter, setBookFilter] = useState("available");
-    function setBookTab($param) {
-        setBookFilter($param);
+    const [selectedTab, setSelectedTab] = useState("book-lists");
+    function setTab(param, callback) {
+        callback(param);
     }
-    // useEffect(() => {
-    //     console.log(bookFilter);
-    // }, [bookFilter]);
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -35,6 +33,7 @@ export default function Dashboard({ auth, books }) {
                 </div>
                 {/* content */}
                 <main className="h-full bg-slate-500 mb-[80px] pt-10  sm:flex-1 sm:px-10 sm:py-5 flex flex-col gap-y-7">
+                    {/* header */}
                     <div className="px-5 flex items-center justify-between">
                         <Dropdown>
                             <Dropdown.Trigger>
@@ -52,10 +51,12 @@ export default function Dashboard({ auth, books }) {
                                 </Dropdown.Link>
                             </Dropdown.Content>
                         </Dropdown>
-
+                        {/* tab */}
                         <div className="flex gap-x-3">
                             <div
-                                onClick={() => setBookTab("available")}
+                                onClick={() =>
+                                    setTab("available", setBookFilter)
+                                }
                                 className={`tab-books ${
                                     bookFilter == "available"
                                         ? "selected-tab"
@@ -65,7 +66,7 @@ export default function Dashboard({ auth, books }) {
                                 Available
                             </div>
                             <div
-                                onClick={() => setBookTab("booked")}
+                                onClick={() => setTab("booked", setBookFilter)}
                                 className={`tab-books ${
                                     bookFilter == "booked" ? "selected-tab" : ""
                                 }`}
