@@ -8,13 +8,26 @@ export default function Dashboard({ auth, books, bookCategories }) {
     // tab condition
     const [bookFilter, setBookFilter] = useState("available");
     const [selectedTab, setSelectedTab] = useState("book-lists");
-    console.log(bookCategories);
+    const [categoryNow, setCategoryNow] = useState("");
     // book data
-    const [book, setBook] = useState(books);
-    // console.log(bookCategories);
+    const [book, setBook] = useState(
+        JSON.parse(sessionStorage.getItem("books")) || books
+    );
+
+    // Ketika `book` di-update, simpan ke `sessionStorage`
     function setTab(param, callback) {
         callback(param);
     }
+    function setCategoryData(categoryId, name) {
+        let filteredBooks = books.filter(
+            (book) => book.category_id == categoryId
+        );
+        setBook(filteredBooks);
+        setCategoryNow(name);
+    }
+    useEffect(() => {
+        sessionStorage.setItem("books", JSON.stringify(book));
+    }, [book]);
     // jangan ubah langsung dari referensi / not pure funcition
     // jangan looping dari referensi yang berubah
     useEffect(() => {
@@ -39,9 +52,6 @@ export default function Dashboard({ auth, books, bookCategories }) {
             console.log(book);
         }
     }, [selectedTab, bookFilter]);
-    useEffect(() => {
-        console.log(book);
-    }, [book]);
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -85,14 +95,20 @@ export default function Dashboard({ auth, books, bookCategories }) {
                             </Dropdown.Trigger>
                             <Dropdown.Content align="left">
                                 {bookCategories.map((category) => (
-                                    <Dropdown.Link
-                                        href={`/dashboard/category?${category.id}`}
+                                    <div
+                                        onClick={() =>
+                                            setCategoryData(
+                                                category.id,
+                                                category.name
+                                            )
+                                        }
+                                        className="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                                     >
                                         <span>{category.name}</span>
-                                        <span className="ml-3    inline-block">
+                                        <span className="ml-3 inline-block">
                                             {category.books_count}
                                         </span>
-                                    </Dropdown.Link>
+                                    </div>
                                 ))}
                             </Dropdown.Content>
                         </Dropdown>
@@ -128,19 +144,25 @@ export default function Dashboard({ auth, books, bookCategories }) {
                             ""
                         )}
                     </div>
-                    {selectedTab == "book-lists" ? (
-                        <div className="w-full flex-1 bg-white px-4 py-4">
-                            <p>List Of Books</p>
-                            <p>Description testt </p>
-                            <Table books={book} />
-                        </div>
-                    ) : (
-                        <div className="w-full flex-1 bg-white px-4 py-4">
-                            <p>List Of Borrowed</p>
-                            <p>Description text </p>
-                            <Table books={book} />
-                        </div>
-                    )}
+                    <div className="w-full flex-1 bg-white px-4 py-4">
+                        {selectedTab == "book-lists" ? (
+                            <>
+                                <p>List Of Books</p>
+                            </>
+                        ) : (
+                            <>
+                                <p>List Of Borrowed</p>
+                            </>
+                        )}
+                        {categoryNow == "" ? (
+                            ""
+                        ) : (
+                            <p>
+                                Category :<b>{categoryNow}</b>
+                            </p>
+                        )}
+                        <Table books={book} />
+                    </div>
                 </main>
             </div>
         </AuthenticatedLayout>
