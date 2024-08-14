@@ -10,7 +10,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    public function book(){
-        $this->hasMany(Book::class);
+    public function books(){
+       return $this->hasMany(Book::class);
     }
 }

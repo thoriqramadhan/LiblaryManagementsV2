@@ -3,22 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class DashboardResource extends Controller
+class ListBookResource extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = auth()->user()->load('book');
-        // dd($user);
+        $categories = Category::withCount('books')->get();
+        // dd($book);
         return Inertia::render('Dashboard', [
-            'books' => Book::all()
+            'books' => Book::all(),
+            'bookCategories' => $categories,
         ]);
     }
 
@@ -41,9 +43,13 @@ class DashboardResource extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Book $book)
+    public function show(Request $request)
     {
-        //
+        dd($request);
+        return Inertia::render('Dashboard', [
+            'books' => Book::all(),
+            'bookCategories' => $categories,
+        ]);
     }
 
     /**

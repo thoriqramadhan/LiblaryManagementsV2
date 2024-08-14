@@ -1,25 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-function Table({ books, bookTab }) {
-    // jangan ubah langsung dari referensi / not pure funcition
-    const [bookCon, setBookCon] = useState(books);
-    let filteredBook;
-    // jangan looping dari referensi yang berubah
-
-    useEffect(() => {
-        if (bookTab == "booked") {
-            filteredBook = books.filter((book) => {
-                return book.user_id == 0;
-            });
-            setBookCon(filteredBook);
-        } else {
-            filteredBook = books.filter((book) => {
-                return book.user_id > 0;
-            });
-            setBookCon(filteredBook);
-        }
-    }, [bookTab]);
-
+function Table({ books }) {
+    // const [book, setBook] = useState(books);
+    // useEffect(() => {
+    //     setBook(books);
+    // }, [books]);
     return (
         <div className="overflow-x-auto">
             <table className="table">
@@ -33,7 +18,7 @@ function Table({ books, bookTab }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {bookCon.map((book) => (
+                    {books.map((book) => (
                         <tr key={book.id}>
                             <td>
                                 <div className="flex items-center gap-3">
@@ -57,7 +42,7 @@ function Table({ books, bookTab }) {
                             </td>
                             <td>
                                 <span className="badge badge-ghost badge-sm">
-                                    {book.user_id == 0 ? "Booked" : "Available"}
+                                    {book.user_id > 0 ? "Booked" : "Available"}
                                 </span>
                             </td>
                             <td>10,Dec 2024</td>

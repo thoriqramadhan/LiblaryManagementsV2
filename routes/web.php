@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\DashboardResource;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\ListBookResource;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
+    
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -16,7 +17,7 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function(){
-    Route::resource('/dashboard', DashboardResource::class)
+    Route::resource('/dashboard', ListBookResource::class)
     ->name('index','dashboard');
 });
 

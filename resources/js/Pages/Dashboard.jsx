@@ -4,12 +4,44 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
-export default function Dashboard({ auth, books }) {
+export default function Dashboard({ auth, books, bookCategories }) {
+    // tab condition
     const [bookFilter, setBookFilter] = useState("available");
     const [selectedTab, setSelectedTab] = useState("book-lists");
+    console.log(bookCategories);
+    // book data
+    const [book, setBook] = useState(books);
+    // console.log(bookCategories);
     function setTab(param, callback) {
         callback(param);
     }
+    // jangan ubah langsung dari referensi / not pure funcition
+    // jangan looping dari referensi yang berubah
+    useEffect(() => {
+        let filteredBooks;
+        if (selectedTab == "book-lists") {
+            if (bookFilter == "booked") {
+                filteredBooks = books.filter((book) => {
+                    return book.status == 0;
+                });
+                setBook(filteredBooks);
+            } else {
+                filteredBooks = books.filter((book) => {
+                    return book.status == 1;
+                });
+                setBook(filteredBooks);
+            }
+        } else if (selectedTab == "booked-lists") {
+            const filteredBooks = books.filter(
+                (book) => book.user_id == auth.user.id
+            );
+            setBook(filteredBooks);
+            console.log(book);
+        }
+    }, [selectedTab, bookFilter]);
+    useEffect(() => {
+        console.log(book);
+    }, [book]);
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -24,10 +56,20 @@ export default function Dashboard({ auth, books }) {
             <div className="relative h-[100vh] sm:flex">
                 {/* sidebar */}
                 <div className="w-full h-[80px] bg-red-100 fixed bottom-0 flex justify-around items-center sm:static sm:h-full sm:w-20 sm:flex-col sm:justify-start sm:gap-y-4 sm:py-[40px] sm:overflow-hidden">
-                    <div className="p-2 cursor-pointer bg-slate-700 text-white hover:bg-black/50">
+                    <div
+                        className={`p-2 cursor-pointer ${
+                            selectedTab == "book-lists" ? "selected-tab" : ""
+                        }`}
+                        onClick={() => setTab("book-lists", setSelectedTab)}
+                    >
                         List Book
                     </div>
-                    <div className="p-2 cursor-pointer hover:bg-black/50">
+                    <div
+                        className={`p-2 cursor-pointer ${
+                            selectedTab == "booked-lists" ? "selected-tab" : ""
+                        }`}
+                        onClick={() => setTab("booked-lists", setSelectedTab)}
+                    >
                         Borrowed
                     </div>
                 </div>
@@ -41,45 +83,64 @@ export default function Dashboard({ auth, books }) {
                                     Genre
                                 </span>
                             </Dropdown.Trigger>
-
                             <Dropdown.Content align="left">
-                                <Dropdown.Link href="#">
-                                    <span>Test</span>
-                                    <span className="ml-[110px] inline-block">
-                                        01
-                                    </span>
-                                </Dropdown.Link>
+                                {bookCategories.map((category) => (
+                                    <Dropdown.Link
+                                        href={`/dashboard/category?${category.id}`}
+                                    >
+                                        <span>{category.name}</span>
+                                        <span className="ml-3    inline-block">
+                                            {category.books_count}
+                                        </span>
+                                    </Dropdown.Link>
+                                ))}
                             </Dropdown.Content>
                         </Dropdown>
                         {/* tab */}
-                        <div className="flex gap-x-3">
-                            <div
-                                onClick={() =>
-                                    setTab("available", setBookFilter)
-                                }
-                                className={`tab-books ${
-                                    bookFilter == "available"
-                                        ? "selected-tab"
-                                        : ""
-                                }`}
-                            >
-                                Available
+                        {selectedTab == "book-lists" ? (
+                            <div className="flex gap-x-3">
+                                <div
+                                    onClick={() =>
+                                        setTab("available", setBookFilter)
+                                    }
+                                    className={`tab-books ${
+                                        bookFilter == "available"
+                                            ? "selected-tab"
+                                            : ""
+                                    }`}
+                                >
+                                    Available
+                                </div>
+                                <div
+                                    onClick={() =>
+                                        setTab("booked", setBookFilter)
+                                    }
+                                    className={`tab-books ${
+                                        bookFilter == "booked"
+                                            ? "selected-tab"
+                                            : ""
+                                    }`}
+                                >
+                                    Booked
+                                </div>
                             </div>
-                            <div
-                                onClick={() => setTab("booked", setBookFilter)}
-                                className={`tab-books ${
-                                    bookFilter == "booked" ? "selected-tab" : ""
-                                }`}
-                            >
-                                Booked
-                            </div>
+                        ) : (
+                            ""
+                        )}
+                    </div>
+                    {selectedTab == "book-lists" ? (
+                        <div className="w-full flex-1 bg-white px-4 py-4">
+                            <p>List Of Books</p>
+                            <p>Description testt </p>
+                            <Table books={book} />
                         </div>
-                    </div>
-                    <div className="w-full flex-1 bg-white px-4 py-4">
-                        <p>List Of Books</p>
-                        <p>Description testt </p>
-                        <Table books={books} bookTab={bookFilter} />
-                    </div>
+                    ) : (
+                        <div className="w-full flex-1 bg-white px-4 py-4">
+                            <p>List Of Borrowed</p>
+                            <p>Description text </p>
+                            <Table books={book} />
+                        </div>
+                    )}
                 </main>
             </div>
         </AuthenticatedLayout>
