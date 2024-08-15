@@ -121,7 +121,7 @@ export default function Dashboard({ auth, books, bookCategories }) {
                     )}
                 </div>
                 {/* content */}
-                <div className="w-full flex-1 bg-white px-4 py-4">
+                <div className="w-full flex-1 bg-white px-4 py-4 overflow-y-auto">
                     {selectedTab == "book-lists" ? (
                         <>
                             <p>List Of Books</p>

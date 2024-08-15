@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 function Table({ books, selectedTab }) {
     // const routeToDetail = selectedTab == 'booked' ? `/dashboard/booked${}`
     return (
-        <div className="overflow-x-auto">
+        <div className="">
             <table className="table">
                 {/* head */}
                 <thead>

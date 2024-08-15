@@ -10,6 +10,6 @@
         @apply transition-all duration-300 bg-white rounded-md border px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out 
     }
     .selected-tab{
-        @apply bg-slate-700 text-white hover:opacity-70 hover:bg-slate-700
+        @apply bg-slate-800 text-white 
     }
 }
