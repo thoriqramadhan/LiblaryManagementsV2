@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ListBookResource extends Controller
@@ -18,7 +19,7 @@ class ListBookResource extends Controller
     {
         $categories = Category::withCount('books')->get();
         // dd($book);
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Dashboard/Dashboard', [
             'books' => Book::all(),
             'bookCategories' => $categories,
         ]);
@@ -43,13 +44,12 @@ class ListBookResource extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        dd($request);
-        return Inertia::render('Dashboard', [
-            'books' => Book::all(),
-            'bookCategories' => $categories,
-        ]);
+        $book = Book::find($id);
+        // dd($book);
+        return Inertia::render('Dashboard/Detail', [
+            'book' => $book]);
     }
 
     /**
@@ -63,9 +63,20 @@ class ListBookResource extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(Request $request, $id)
     {
-        //
+        $book = Book::find($id);
+        $newBook = [
+            'name' => $request->name,
+            'author' => $request->author,
+            'description' => $request->description,
+            'status' => 1,
+            'return_at' => $request->returnAt,
+            'user_id' => $request->user_id
+        ];
+        Book::where('id', $id)->update($newBook);
+
+        return to_route('dashboard');
     }
 
     /**

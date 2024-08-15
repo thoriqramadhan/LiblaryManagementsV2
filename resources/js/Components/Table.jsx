@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 function Table({ books }) {
-    // const [book, setBook] = useState(books);
-    // useEffect(() => {
-    //     setBook(books);
-    // }, [books]);
     return (
         <div className="overflow-x-auto">
             <table className="table">
@@ -13,7 +9,7 @@ function Table({ books }) {
                     <tr>
                         <th>Book</th>
                         <th>Status</th>
-                        <th>Return At</th>
+                        <th>Available At</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -42,14 +38,16 @@ function Table({ books }) {
                             </td>
                             <td>
                                 <span className="badge badge-ghost badge-sm">
-                                    {book.user_id > 0 ? "Booked" : "Available"}
+                                    {book.status > 0 ? "Booked" : "Available"}
                                 </span>
                             </td>
                             <td>10,Dec 2024</td>
                             <th>
-                                <button className="btn btn-ghost btn-xs">
-                                    details
-                                </button>
+                                <a href={`/dashboard/${book.id}`}>
+                                    <button className="btn btn-ghost btn-xs">
+                                        details
+                                    </button>
+                                </a>
                             </th>
                         </tr>
                     ))}
