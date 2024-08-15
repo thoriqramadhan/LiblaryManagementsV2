@@ -9,6 +9,7 @@ use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Psy\Readline\Hoa\Console;
 
 class ListBookResource extends Controller
 {
@@ -44,12 +45,14 @@ class ListBookResource extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
+    public function show(Request $request, $id)
+    {   
         $book = Book::find($id);
-        // dd($book);
+        $user = User::find($book->user_id);
         return Inertia::render('Dashboard/Detail', [
-            'book' => $book]);
+            'book' => $book,
+            'bookedBy' => $user
+        ]);
     }
 
     /**
@@ -65,15 +68,22 @@ class ListBookResource extends Controller
      */
     public function update(Request $request, $id)
     {
-        $book = Book::find($id);
+        // dd(isset($request->booked));
         $newBook = [
             'name' => $request->name,
             'author' => $request->author,
             'description' => $request->description,
             'status' => 1,
-            'return_at' => $request->returnAt,
+            'return_at' => $request->return_at,
             'user_id' => $request->user_id
         ];
+        if(isset($request->booked)){
+            // dd($newBook);
+            $newBook['status'] = 0;
+            $newBook['return_at'] = null;
+            $newBook['user_id'] = 0;
+        }
+        // dd($newBook);
         Book::where('id', $id)->update($newBook);
 
         return to_route('dashboard');

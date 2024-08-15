@@ -138,7 +138,7 @@ export default function Dashboard({ auth, books, bookCategories }) {
                             Category :<b>{categoryNow}</b>
                         </p>
                     )}
-                    <Table books={book} />
+                    <Table books={book} selectedTab={selectedTab} />
                 </div>
             </DashboardLayout>
         </AuthenticatedLayout>
