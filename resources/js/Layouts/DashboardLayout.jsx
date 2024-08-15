@@ -12,7 +12,7 @@ function DashboardLayout({ children, ...props }) {
             />
 
             {/* content */}
-            <main className="h-full pb-[80px] pt-10 sm:flex-1 sm:px-10 sm:py-5 flex flex-col gap-y-7">
+            <main className="h-[100vh] pb-[80px] pt-10 sm:flex-1 sm:px-10 sm:py-5 flex flex-col gap-y-7">
                 {children}
             </main>
         </div>

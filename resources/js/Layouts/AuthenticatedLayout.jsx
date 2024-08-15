@@ -10,7 +10,7 @@ export default function Authenticated({ user, header, children }) {
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-100 flex flex-col">
             <nav className="bg-white border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
@@ -158,7 +158,7 @@ export default function Authenticated({ user, header, children }) {
                 </div>
             </nav>
 
-            <main>{children}</main>
+            <main className="flex-1">{children}</main>
         </div>
     );
 }

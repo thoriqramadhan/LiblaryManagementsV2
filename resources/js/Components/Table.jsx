@@ -46,7 +46,9 @@ function Table({ books, selectedTab }) {
                                     </span>
                                 </td>
                                 <td>
-                                    {book.return_at ? book.return_at : "Now"}
+                                    {book.return_at
+                                        ? book.return_at.split(" ")[0]
+                                        : "Now"}
                                 </td>
                                 <th>
                                     {/* show detail */}

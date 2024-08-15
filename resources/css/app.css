@@ -12,4 +12,8 @@
     .selected-tab{
         @apply bg-slate-800 text-white 
     }
+
+    .label-input{
+        @apply block text-lg font-semibold mb-2 mt-2
+    }
 }

@@ -35,3 +35,21 @@ export const ListSvg = ({ ...props }) => (
         />
     </svg>
 );
+
+export const BackArrowSvg = ({ ...props }) => (
+    <svg
+        width={props.width}
+        height={props.height}
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M38 24H10M10 24L24 38M10 24L24 10"
+            stroke={props.color}
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        />
+    </svg>
+);
