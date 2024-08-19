@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 function BookFiltering({ books, auth }) {
-    console.log(books);
+    // console.log(books);
     const [bookFilter, setBookFilter] = useState("available");
     const [selectedTab, setSelectedTab] = useState("book-lists");
     const [book, setBook] = useState(

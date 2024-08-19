@@ -1,7 +1,9 @@
-import { router, useRemember } from "@inertiajs/react";
+import { router, usePage, useRemember } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 
 function FormModal({ id, categories }) {
+    const { errors } = usePage().props;
+    console.log(errors.createBooks);
     const [values, setValues] = useRemember({
         name: "",
         author: "",
@@ -24,7 +26,17 @@ function FormModal({ id, categories }) {
     };
     const submitHandler = (e) => {
         e.preventDefault();
-        router.post("/admins", values);
+        router.post("/admins", values, {
+            errorBag: "createBooks",
+        });
+        setValues({
+            name: "",
+            author: "",
+            description: "",
+            status: 0,
+            category_id: categories[0].id,
+            user_id: 0,
+        });
     };
     return (
         <>

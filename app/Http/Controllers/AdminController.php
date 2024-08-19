@@ -37,13 +37,15 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        Book::create($request->validate([
             'name' => 'required|min:4|max:8',
             'author' => 'required|min:3',
             'description' => 'required:min:10',
-            'category_id' => 'required'
-        ]);
-        dd($validatedData);
+            'status' => 'required',
+            'category_id' => 'required',
+            'user_id' => 'required'
+        ]));
+        return to_route('admin');
     }
 
     /**
