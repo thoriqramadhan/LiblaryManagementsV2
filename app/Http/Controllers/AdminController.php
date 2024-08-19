@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,9 +16,11 @@ class AdminController extends Controller
      */
     public function index()
     {
+        // dd(Category::all());
         return Inertia::render('Dashboard/Admin/Admin' , [
             'auth' => auth()->user(),
-            'books' => Book::all()
+            'books' => Book::all(),
+            'categories' => Category::all()
         ]);
     }
 
@@ -34,7 +37,13 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|min:4|max:8',
+            'author' => 'required|min:3',
+            'description' => 'required:min:10',
+            'category_id' => 'required'
+        ]);
+        dd($validatedData);
     }
 
     /**
@@ -47,6 +56,7 @@ class AdminController extends Controller
         return Inertia::render('Dashboard/Detail', [
             'book' => $book,
             'bookedBy' => $user,
+            'category' => Category::all(),
             'admin' => true
         ]);
 
@@ -75,8 +85,10 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        //
+        // dd($id);
+        Book::destroy($id);
+        return to_route('admin');
     }
 }
