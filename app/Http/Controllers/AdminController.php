@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -13,7 +15,10 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Dashboard/Admin');
+        return Inertia::render('Dashboard/Admin/Admin' , [
+            'auth' => auth()->user(),
+            'books' => Book::all()
+        ]);
     }
 
     /**
@@ -35,9 +40,16 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+        $book = Book::find($id);
+        $user = User::find($book->user_id);
+        return Inertia::render('Dashboard/Detail', [
+            'book' => $book,
+            'bookedBy' => $user,
+            'admin' => true
+        ]);
+
     }
 
     /**
@@ -51,9 +63,13 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request , $id)
     {
-        //
+        // todo add validation
+        $book = Book::find($id);
+        $data = $request->all();
+        $book->update($data);
+        return to_route('admin');
     }
 
     /**

@@ -16,4 +16,8 @@
     .label-input{
         @apply block text-lg font-semibold mb-2 mt-2
     }
+
+    .primary-btn{
+        @apply bg-slate-700 px-4 py-2 rounded-md text-white
+    }
 }

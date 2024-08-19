@@ -3,7 +3,7 @@ import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { router, useRemember } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 
-function Detail({ book, bookedBy, auth }) {
+function Detail({ book, bookedBy, auth, admin = false }) {
     const [values, setValues] = useRemember({
         name: book.name,
         author: book.author,
@@ -15,23 +15,29 @@ function Detail({ book, bookedBy, auth }) {
     function handleChange(e) {
         const key = e.target.id;
         const value = e.target.value;
+        console.log(`Changing ${key} to ${value}`); // Log perubahan input
         setValues((values) => ({
             ...values,
             user_id: auth.user.id,
             [key]: value,
         }));
     }
+
     function handleSubmit(e) {
         e.preventDefault();
-        const dynamicRoute =
-            auth.user.id == book.user_id
-                ? `/dashboard/${book.id}?booked=true`
-                : `/dashboard/${book.id}`;
-        console.log(dynamicRoute);
+        const dynamicRoute = admin
+            ? `/admins/${book.id}`
+            : auth.user.id == book.user_id
+            ? `/dashboard/${book.id}?booked=true`
+            : `/dashboard/${book.id}`;
         router.put(dynamicRoute, values);
     }
+
+    const shouldDisableInputs =
+        !admin && (book.user_id === auth.user.id || !!book.user_id);
+
     useEffect(() => {
-        console.log(values);
+        console.log("Values on render:", values);
     }, [values]);
 
     return (
@@ -57,9 +63,10 @@ function Detail({ book, bookedBy, auth }) {
                                 type="text"
                                 name="name"
                                 id="name"
-                                className="p-2 rounded-md"
-                                value={book.name}
-                                disabled
+                                className="p-2 rounded-md border"
+                                value={values.name}
+                                onChange={handleChange}
+                                disabled={shouldDisableInputs}
                             />
                         </div>
                         <div className="">
@@ -68,11 +75,12 @@ function Detail({ book, bookedBy, auth }) {
                             </label>
                             <input
                                 type="text"
-                                className="p-2 w-full rounded-md"
+                                className="p-2 w-full rounded-md border"
                                 name="author"
                                 id="author"
-                                value={book.author}
-                                disabled
+                                value={values.author}
+                                onChange={handleChange}
+                                disabled={shouldDisableInputs}
                             />
                         </div>
                         <div className="">
@@ -84,11 +92,12 @@ function Detail({ book, bookedBy, auth }) {
                             </label>
                             <textarea
                                 type="text-area"
-                                className="p-2 w-full rounded-md block max-h-[100px]"
+                                className="p-2 w-full rounded-md block max-h-[100px] border"
                                 name="description"
                                 id="description"
-                                value={book.description}
-                                disabled
+                                value={values.description}
+                                onChange={handleChange}
+                                disabled={shouldDisableInputs}
                             />
                         </div>
                         <div className="">
@@ -103,13 +112,10 @@ function Detail({ book, bookedBy, auth }) {
                                 value={
                                     values.return_at
                                         ? values.return_at.split(" ")[0]
-                                        : null
+                                        : ""
                                 }
                                 onChange={handleChange}
-                                disabled={
-                                    book.user_id === auth.user.id ||
-                                    !!book.user_id
-                                }
+                                disabled={shouldDisableInputs && !admin}
                                 required
                             />
                         </div>
@@ -124,16 +130,32 @@ function Detail({ book, bookedBy, auth }) {
                         ) : (
                             ""
                         )}
-                        <button
-                            className="bg-slate-700 px-4 py-2 rounded-md text-white"
-                            hidden={
-                                !!book.user_id && auth.user.id != book.user_id
-                            }
-                        >
-                            {!!book.user_id && auth.user.id == book.user_id
-                                ? "Return Book"
-                                : "Borrow Book"}
-                        </button>
+                        {/* dynamic button */}
+                        {admin ? (
+                            <>
+                                <button
+                                    className="primary-btn mr-4"
+                                    type="submit"
+                                >
+                                    Edit
+                                </button>
+                                <button className="primary-btn bg-red-700">
+                                    Delete
+                                </button>
+                            </>
+                        ) : (
+                            <button
+                                className="primary-btn"
+                                hidden={
+                                    !!book.user_id &&
+                                    auth.user.id != book.user_id
+                                }
+                            >
+                                {!!book.user_id && auth.user.id == book.user_id
+                                    ? "Return Book"
+                                    : "Borrow Book"}
+                            </button>
+                        )}
                     </form>
                 </div>
             </Authenticated>

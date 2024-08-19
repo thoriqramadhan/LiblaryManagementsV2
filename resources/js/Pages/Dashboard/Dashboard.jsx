@@ -4,9 +4,9 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Head } from "@inertiajs/react";
 import { createContext, useContext, useEffect, useState } from "react";
+import AuthProvider from "../Auth/AuthProvider";
 
 // create context Model
-const AuthContext = createContext(null);
 
 export default function Dashboard({ auth, books, bookCategories }) {
     // tab condition
@@ -27,10 +27,6 @@ export default function Dashboard({ auth, books, bookCategories }) {
     function setTab(param, callback) {
         callback(param);
     }
-    useEffect(() => {
-        sessionStorage.setItem("books", JSON.stringify(book));
-        console.log(book);
-    }, [book]);
     // jangan ubah langsung dari referensi / not pure funcition
     // jangan looping dari referensi yang berubah
     useEffect(() => {
@@ -66,7 +62,7 @@ export default function Dashboard({ auth, books, bookCategories }) {
             }
         >
             <Head title="Dashboard" />
-            <AuthContext.Provider value={auth}>
+            <AuthProvider auth={auth.user}>
                 <DashboardLayout
                     selectedTab={selectedTab}
                     setSelectedTab={setSelectedTab}
@@ -155,12 +151,7 @@ export default function Dashboard({ auth, books, bookCategories }) {
                         <Table books={book} selectedTab={selectedTab} />
                     </div>
                 </DashboardLayout>
-            </AuthContext.Provider>
+            </AuthProvider>
         </AuthenticatedLayout>
     );
 }
-
-// export useContext for outside components
-export const useAuth = () => {
-    return useContext(AuthContext);
-};

@@ -4,7 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookedBooksController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\ListBookResource;
 use App\Http\Controllers\ProfileController;
 
@@ -24,9 +24,9 @@ Route::middleware('auth')->group(function(){
     Route::put('/dashboard/return-books/{id}' , [BookedBooksController::class, 'update']);
 });
 
-Route::middleware('auth')->group(function(){
-    Route::resource('/admins', AdminController::class);
-});
+Route::middleware(['auth','can:admins'])->group(function(){
+    Route::resource('/admins', AdminController::class)->name('index' , 'admin');
+}); 
 
 
 Route::middleware('auth')->group(function () {

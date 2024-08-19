@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function Table({ books, selectedTab }) {
+function Table({ books, layout }) {
     // const routeToDetail = selectedTab == 'booked' ? `/dashboard/booked${}`
     return (
         <div className="">
@@ -52,7 +52,13 @@ function Table({ books, selectedTab }) {
                                 </td>
                                 <th>
                                     {/* show detail */}
-                                    <a href={`/dashboard/${book.id}`}>
+                                    <a
+                                        href={`${
+                                            layout == "admin"
+                                                ? `/admins/${book.id}`
+                                                : `/dashboard/${book.id}`
+                                        }`}
+                                    >
                                         <button className="btn btn-ghost btn-xs">
                                             details
                                         </button>

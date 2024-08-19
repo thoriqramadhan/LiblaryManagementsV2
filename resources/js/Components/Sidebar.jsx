@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
-import { useAuth } from "@/Pages/Dashboard/Dashboard";
 import { HomeSvg, ListSvg, ServiceSvg } from "./Svg";
+import { AuthContext } from "@/Pages/Auth/AuthProvider";
 import SidebarTab from "./SidebarTab";
 
 function Sidebar({ setTab, selectedTab, setSelectedTab }) {
     function setTab(param, callback) {
         callback(param);
     }
-    const auth = useAuth();
-    console.log(auth.user.isAdmin);
+
+    const auth = useContext(AuthContext);
     return (
         <div className="z-10 w-full h-[80px] bg-white border-t shadow-md fixed bottom-0 flex justify-around items-center sm:static sm:h-full sm:w-20 sm:flex-col sm:justify-start sm:gap-y-4 sm:py-[40px] sm:overflow-hidden">
             <SidebarTab
@@ -43,7 +43,7 @@ function Sidebar({ setTab, selectedTab, setSelectedTab }) {
                     className="hidden sm:inline-block"
                 />
             </SidebarTab>
-            {auth.user.isAdmin ? (
+            {auth.isAdmin ? (
                 <SidebarTab
                     setTab={setTab}
                     selectedTab={selectedTab}
