@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookedBooksController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +21,11 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function(){
     Route::resource('/dashboard', ListBookResource::class)
     ->name('index','dashboard');
-    Route::put('/dashboard/return-books/{id}' , [BookedBooksController::class, 'update']) ;
+    Route::put('/dashboard/return-books/{id}' , [BookedBooksController::class, 'update']);
+});
+
+Route::middleware('auth')->group(function(){
+    Route::resource('/admins', AdminController::class);
 });
 
 

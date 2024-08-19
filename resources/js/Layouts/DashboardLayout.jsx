@@ -1,7 +1,7 @@
 import Sidebar from "@/Components/Sidebar";
 import React from "react";
 
-function DashboardLayout({ children, ...props }) {
+function DashboardLayout({ auth, children, ...props }) {
     return (
         <div className="relative h-[100vh] sm:flex">
             {/* sidebar */}
@@ -12,7 +12,7 @@ function DashboardLayout({ children, ...props }) {
             />
 
             {/* content */}
-            <main className="h-[100vh] pb-[80px] pt-10 sm:flex-1 sm:px-10 sm:py-5 flex flex-col gap-y-7">
+            <main className="h-[100vh] pb-[80px] pt-10 sm:flex-1 sm:px-10 sm:py-5 flex flex-col gap-y-4">
                 {children}
             </main>
         </div>

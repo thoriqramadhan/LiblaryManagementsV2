@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useAuth } from "@/Pages/Dashboard/Dashboard";
-import { HomeSvg, ListSvg } from "./Svg";
+import { HomeSvg, ListSvg, ServiceSvg } from "./Svg";
 import SidebarTab from "./SidebarTab";
 
 function Sidebar({ setTab, selectedTab, setSelectedTab }) {
@@ -53,7 +53,7 @@ function Sidebar({ setTab, selectedTab, setSelectedTab }) {
                     <span className="group-hover:text-white sm:hidden">
                         Admin
                     </span>
-                    <ListSvg
+                    <ServiceSvg
                         height="25"
                         width="25"
                         color="white"
