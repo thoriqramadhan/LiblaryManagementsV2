@@ -37,15 +37,24 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        Book::create($request->validate([
-            'name' => 'required|min:4|max:8',
-            'author' => 'required|min:3',
-            'description' => 'required:min:10',
-            'status' => 'required',
-            'category_id' => 'required',
-            'user_id' => 'required'
-        ]));
-        return to_route('admin');
+        $isCategory = $request->get('category');
+        $rules = [
+            'name' => 'required|min:3',
+            'description' => 'required|min:10'
+        ];
+        if(!$isCategory){
+            $rules['author'] = 'required|min:3';
+            $rules['status'] = 'required';
+            $rules['category_id'] = 'required';
+            $rules['user_id'] = 'required';
+        }
+        $validatedData = $request->validate($rules);
+        if($isCategory){
+            Category::create($validatedData);
+        }else{
+            Book::create($validatedData);
+        }
+        return redirect()->back()->with('success', 'Form submitted successfully');
     }
 
     /**
