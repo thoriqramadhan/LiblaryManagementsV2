@@ -5,12 +5,16 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Head } from "@inertiajs/react";
 import { createContext, useContext, useEffect, useState } from "react";
 import AuthProvider from "../Auth/AuthProvider";
+import { SearchSvg } from "@/Components/Svg";
+import ValidationMessage from "@/Components/ValidationMessage";
 
 // create context Model
 
 export default function Dashboard({ auth, books, bookCategories }) {
     // tab condition
     const [bookFilter, setBookFilter] = useState("available");
+    const [searchErr, setSearchErr] = useState("");
+    const [searchInput, setSearchInput] = useState("");
     const [selectedTab, setSelectedTab] = useState("book-lists");
     const [categoryNow, setCategoryNow] = useState("");
 
@@ -27,9 +31,26 @@ export default function Dashboard({ auth, books, bookCategories }) {
     function setTab(param, callback) {
         callback(param);
     }
-    // jangan ubah langsung dari referensi / not pure funcition
-    // jangan looping dari referensi yang berubah
+    function searchHandler() {
+        const trimmedInput = searchInput.trim().toLowerCase();
+        if (!trimmedInput) {
+            setSearchErr("Input tidak boleh kosong!");
+            setBook(books);
+            return;
+        }
+        const searchResult = books.filter((book) =>
+            book.name.toLowerCase().includes(searchInput.toLowerCase().trim())
+        );
+        if (searchResult.length == 0) {
+            setSearchErr("Nama buku tidak ada di database!");
+            return;
+        }
+
+        setBook(searchResult);
+    }
     useEffect(() => {
+        // jangan ubah langsung dari referensi / not pure funcition
+        // jangan looping dari referensi yang berubah
         let filteredBooks;
         if (selectedTab == "book-lists") {
             if (bookFilter == "booked") {
@@ -68,6 +89,28 @@ export default function Dashboard({ auth, books, bookCategories }) {
                     setSelectedTab={setSelectedTab}
                 >
                     {/* header */}
+                    <div className="w-full flex items-end flex-col">
+                        <label className="input input-bordered flex items-center gap-2">
+                            <input
+                                type="text"
+                                className="grow outline-none"
+                                placeholder="Search"
+                                value={searchInput}
+                                onChange={(e) => {
+                                    setSearchInput(e.target.value);
+                                    setSearchErr("");
+                                }}
+                            />
+                            <div
+                                className="cursor-pointer"
+                                onClick={searchHandler}
+                            >
+                                <SearchSvg />
+                            </div>
+                        </label>
+                        <ValidationMessage msg={searchErr} />
+                    </div>
+
                     <div className=" flex items-center justify-between">
                         <Dropdown>
                             <Dropdown.Trigger>
