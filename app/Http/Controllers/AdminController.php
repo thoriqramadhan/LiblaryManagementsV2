@@ -16,11 +16,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        // dd(Category::all());
         return Inertia::render('Dashboard/Admin/Admin' , [
             'auth' => auth()->user(),
             'books' => Book::all(),
-            'categories' => Category::all()
+            'categories' => Category::all(),
+            'admins' => User::where('isAdmin' , 1)->get()
         ]);
     }
 
@@ -38,23 +38,35 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $isCategory = $request->get('category');
+        $newAdmin = $request->get('new_admin');
         $rules = [
             'name' => 'required|min:3',
-            'description' => 'required|min:10'
         ];
-        if(!$isCategory){
+        if(!$isCategory && !$newAdmin){
+            $rules['description'] = 'required|min:10';
             $rules['author'] = 'required|min:3';
             $rules['status'] = 'required';
             $rules['category_id'] = 'required';
             $rules['user_id'] = 'required';
         }
+        if($isCategory){
+            $rules['description'] = 'required|min:10';
+        }
+        if($newAdmin){
+            $rules['email'] = 'required|email:dns';
+            $rules['password'] = 'required|min:8';
+            $rules['isAdmin'] = 'required';
+        }
         $validatedData = $request->validate($rules);
+        // dd($validatedData);/
         if($isCategory){
             Category::create($validatedData);
+        }else if($newAdmin){
+            User::create($validatedData);
         }else{
             Book::create($validatedData);
         }
-        return redirect()->back()->with('success', 'Form submitted successfully');
+        return redirect()->back()->with('success', 'submitted successfully');
     }
 
     /**

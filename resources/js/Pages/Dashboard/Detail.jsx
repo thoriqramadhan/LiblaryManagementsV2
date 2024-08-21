@@ -109,25 +109,32 @@ function Detail({ book, bookedBy, auth, admin = false, category }) {
                                 disabled={shouldDisableInputs}
                             />
                         </div>
-                        <div className="">
-                            <label className="label-input" htmlFor="return_at">
-                                Return Book At
-                            </label>
-                            <input
-                                type="date"
-                                className="p-2 w-full border rounded-md"
-                                name="return_at"
-                                id="return_at"
-                                value={
-                                    values.return_at
-                                        ? values.return_at.split(" ")[0]
-                                        : ""
-                                }
-                                onChange={handleChange}
-                                disabled={shouldDisableInputs && !admin}
-                                required
-                            />
-                        </div>
+                        {admin ? (
+                            ""
+                        ) : (
+                            <div className="">
+                                <label
+                                    className="label-input"
+                                    htmlFor="return_at"
+                                >
+                                    Return Book At
+                                </label>
+                                <input
+                                    type="date"
+                                    className="p-2 w-full border rounded-md"
+                                    name="return_at"
+                                    id="return_at"
+                                    value={
+                                        values.return_at
+                                            ? values.return_at.split(" ")[0]
+                                            : ""
+                                    }
+                                    onChange={handleChange}
+                                    disabled={shouldDisableInputs && !admin}
+                                    required
+                                />
+                            </div>
+                        )}
                         <hr className="my-4" />
                         {!!book.user_id ? (
                             <p className="my-5 text-md font-medium">

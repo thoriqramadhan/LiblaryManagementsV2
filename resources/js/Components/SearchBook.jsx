@@ -19,7 +19,7 @@ function SearchBook({ books, setBook }) {
             setSearchErr("Nama buku tidak ada di database!");
             return;
         }
-
+        setSearchErr(`Berhasil menemukan ${searchResult.length} data`);
         setBook(searchResult);
     }
     return (

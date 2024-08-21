@@ -10,7 +10,7 @@ function Sidebar({ setTab, selectedTab, setSelectedTab }) {
 
     const auth = useContext(AuthContext);
     return (
-        <div className="z-10 w-full h-[80px] bg-white border-t shadow-md fixed bottom-0 flex justify-around items-center sm:static sm:h-full sm:w-20 sm:flex-col sm:justify-start sm:gap-y-4 sm:py-[40px] sm:overflow-hidden">
+        <div className="z-10 w-full h-[80px] bg-white border-t shadow-md fixed bottom-0 flex justify-around items-center sm:static sm:h-full sm:w-20 sm:flex-col sm:justify-start sm:gap-y-4 sm:pt-[40px] sm:overflow-hidden">
             <SidebarTab
                 selectedTab={selectedTab}
                 setSelectedTab={setSelectedTab}
