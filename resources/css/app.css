@@ -6,4 +6,21 @@
     .text-link{
         @apply font-bold text-xl transition-all duration-300 hover:text-black
     }
+    .tab-books{
+        @apply transition-all duration-300 bg-white rounded-md border px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out 
+    }
+    .selected-tab{
+        @apply bg-slate-800 text-white 
+    }
+
+    .label-input{
+        @apply block text-lg font-semibold mb-2 mt-2
+    }
+    .input-form{
+        @apply w-full p-2 border rounded-md
+    }
+
+    .primary-btn{
+        @apply bg-slate-700 px-4 py-2 rounded-md text-white
+    }
 }
